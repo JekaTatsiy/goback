@@ -22,7 +22,7 @@ const (
 	CRONMIDNIGHT CronExpr = "0 0 * * *"
 )
 
-func SetRotatebleLogger(serv ser.LogServerI, period CronExpr) error {
+func SetRotatebleLogger(serv ser.LogServer, period CronExpr) error {
 	go func() {
 		s := gocron.NewScheduler(time.UTC)
 		s.Cron(string(period)).Do(logRotator, serv)
@@ -32,7 +32,7 @@ func SetRotatebleLogger(serv ser.LogServerI, period CronExpr) error {
 	return logRotator(serv)
 }
 
-func logRotator(serv ser.LogServerI) error {
+func logRotator(serv ser.LogServer) error {
 	f, e := todayFile()
 	if e != nil {
 		if serv.GetLoger() != nil {

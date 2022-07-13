@@ -73,7 +73,9 @@ func (e *Err) WithPos(dept int) *Err {
 }
 
 func (e *Err) Err(l *logrus.Entry) *Err {
-	e.WithPos(2)
+	if e.Line == 0 || e.Func == "" {
+		e.WithPos(2)
+	}
 	l.
 		WithField("Code", e.Code).
 		WithField("Msg", e.Msg).
