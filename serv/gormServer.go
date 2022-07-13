@@ -19,14 +19,21 @@ type GormSimpleServer struct {
 	InnerError *err.Err
 	ORM        *gorm.DB
 	Database   struct {
-		Host   string
-		Port   string
-		User   string
-		Pass   string
-		DBName string
+		Host string
+		Port string
+		User string
+		Pass string
+		Base string
 	}
 }
 
+func (g *GormSimpleServer) SetDsn(host, port, user, pass, dbname string) {
+	g.Database.Host = host
+	g.Database.Port = port
+	g.Database.User = user
+	g.Database.Pass = pass
+	g.Database.Base = dbname
+}
 func (g *GormSimpleServer) SetGormInnerError(e *err.Err) {
 	g.InnerError = e
 }
@@ -43,7 +50,7 @@ func (g *GormSimpleServer) GetDsn() string {
 		g.Database.Pass,
 		g.Database.Host,
 		g.Database.Port,
-		g.Database.DBName,
+		g.Database.Base,
 	)
 }
 
