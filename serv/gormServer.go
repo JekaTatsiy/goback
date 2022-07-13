@@ -8,8 +8,8 @@ import (
 )
 
 type GormServer interface {
-	SetInnerError(*err.Err)
-	GetInnerError() *err.Err
+	SetGormInnerError(*err.Err)
+	GetGormInnerError() *err.Err
 	GetDsn() string
 	SetGorm(*gorm.DB)
 	Gorm() *gorm.DB
