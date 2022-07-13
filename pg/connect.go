@@ -18,7 +18,7 @@ func SetDBConnection(serv ser.GormServer) error {
 
 	base, e := sql.Open("postgres", serv.GetDsn())
 	if e != nil {
-		serv.SetGormInnerError(err.FromError(e))
+		serv.SetGormInnerError(err.FromError(e).WithPos(1))
 		return e
 	}
 
@@ -31,11 +31,11 @@ func SetDBConnection(serv ser.GormServer) error {
 	select {
 	case e = <-errorWait:
 		if e != nil {
-			serv.SetGormInnerError(err.FromError(e))
+			serv.SetGormInnerError(err.FromError(e).WithPos(1))
 		}
 	case <-time.After(time.Second):
 		msg := fmt.Sprintf("failed to connect to database after 1 second with dsn='%s'", serv.GetDsn())
-		serv.SetGormInnerError(err.FromMsgf(msg))
+		serv.SetGormInnerError(err.FromMsgf(msg).WithPos(1))
 		e = errors.New(msg)
 	}
 
@@ -45,7 +45,7 @@ func SetDBConnection(serv ser.GormServer) error {
 
 	db, e := gorm.Open(postgres.New(postgres.Config{Conn: base}), &gorm.Config{})
 	if e != nil {
-		serv.SetGormInnerError(err.FromError(e))
+		serv.SetGormInnerError(err.FromError(e).WithPos(1))
 		return e
 	}
 	serv.SetGorm(db)
