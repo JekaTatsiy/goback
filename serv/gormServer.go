@@ -27,11 +27,11 @@ type GormSimpleServer struct {
 	}
 }
 
-func (g *GormSimpleServer) SetInnerError(e *err.Err) {
+func (g *GormSimpleServer) SetGormInnerError(e *err.Err) {
 	g.InnerError = e
 }
 
-func (g *GormSimpleServer) GetInnerError() *err.Err {
+func (g *GormSimpleServer) GetGormInnerError() *err.Err {
 	return g.InnerError
 }
 
@@ -54,4 +54,3 @@ func (g *GormSimpleServer) SetGorm(orm *gorm.DB) {
 func (g *GormSimpleServer) Gorm() *gorm.DB {
 	return g.ORM
 }
-
