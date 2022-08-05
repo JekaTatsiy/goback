@@ -2,7 +2,6 @@ package pg
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"time"
 
