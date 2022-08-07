@@ -36,11 +36,15 @@ func FromCode(code errCode) *Err {
 	return &Err{Code: code, Msg: msg}
 }
 func FromError(e error) *Err {
-	return &Err{Code: E_SOME, Msg: e.Error()}
+	if e != nil {
+		return &Err{Code: E_SOME, Msg: e.Error()}
+	} else {
+		return &Err{Code: E_NONE, Msg: ""}
+	}
 }
 
 func NewErrEmp() *Err {
-	return &Err{Code: 0, Msg: ""}
+	return &Err{Code: E_NONE, Msg: ""}
 }
 
 func (e *Err) WithCode(code int) *Err {
@@ -73,6 +77,9 @@ func (e *Err) WithPos(dept int) *Err {
 }
 
 func (e *Err) Err(l *logrus.Entry) *Err {
+	if l == nil {
+		l = logrus.NewEntry(&logrus.Logger{})
+	}
 	if e.Line == 0 || e.Func == "" {
 		e.WithPos(2)
 	}
@@ -85,6 +92,9 @@ func (e *Err) Err(l *logrus.Entry) *Err {
 	return e
 }
 func (e *Err) Info(l *logrus.Entry) *Err {
+	if l == nil {
+		l = logrus.NewEntry(&logrus.Logger{})
+	}
 	l.
 		WithField("Code", e.Code).
 		WithField("Msg", e.Msg).
