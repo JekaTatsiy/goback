@@ -2,11 +2,12 @@ package pg
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
+	"time"
+
 	err "github.com/JekaTatsiy/goback/err"
 	ser "github.com/JekaTatsiy/goback/serv"
-	"time"
+	"github.com/sirupsen/logrus"
 
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
@@ -35,8 +36,7 @@ func SetDBConnection(serv ser.GormServer) error {
 		}
 	case <-time.After(time.Second):
 		msg := fmt.Sprintf("failed to connect to database after 1 second with dsn='%s'", serv.GetDsn())
-		serv.SetGormInnerError(err.FromMsgf(msg).WithPos(1))
-		e = errors.New(msg)
+		err.FromMsgf(msg).WithPos(1).Info(logrus.NewEntry(logrus.StandardLogger()))
 	}
 
 	if e != nil {

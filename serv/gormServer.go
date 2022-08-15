@@ -16,9 +16,10 @@ type GormServer interface {
 }
 
 type GormSimpleServer struct {
-	InnerError *err.Err
-	ORM        *gorm.DB
-	Database   struct {
+	InnerError     *err.Err
+	ORM            *gorm.DB
+	DatabaseString string
+	Database       struct {
 		Host string
 		Port string
 		User string
@@ -27,12 +28,27 @@ type GormSimpleServer struct {
 	}
 }
 
+func (g *GormSimpleServer) SetDsnString(dbstring string) {
+	g.DatabaseString = dbstring
+}
+
 func (g *GormSimpleServer) SetDsn(host, port, user, pass, dbname string) {
 	g.Database.Host = host
 	g.Database.Port = port
 	g.Database.User = user
 	g.Database.Pass = pass
 	g.Database.Base = dbname
+
+	testDSN := "user=%s password=%s host=%s port=%s dbname=%s sslmode=disable"
+	g.DatabaseString = fmt.Sprintf(
+		testDSN,
+		g.Database.User,
+		g.Database.Pass,
+		g.Database.Host,
+		g.Database.Port,
+		g.Database.Base,
+	)
+
 }
 func (g *GormSimpleServer) SetGormInnerError(e *err.Err) {
 	g.InnerError = e
@@ -43,15 +59,7 @@ func (g *GormSimpleServer) GetGormInnerError() *err.Err {
 }
 
 func (g *GormSimpleServer) GetDsn() string {
-	testDSN := "user=%s password=%s host=%s port=%s dbname=%s sslmode=disable"
-	return fmt.Sprintf(
-		testDSN,
-		g.Database.User,
-		g.Database.Pass,
-		g.Database.Host,
-		g.Database.Port,
-		g.Database.Base,
-	)
+	return g.DatabaseString
 }
 
 func (g *GormSimpleServer) SetGorm(orm *gorm.DB) {
