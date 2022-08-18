@@ -2,8 +2,10 @@ package err
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
+	"os"
 	"runtime"
+
+	"github.com/sirupsen/logrus"
 )
 
 type errCode int
@@ -15,6 +17,12 @@ type Err struct {
 	Func       string
 	Line       int
 }
+
+var DefaultEntry = logrus.NewEntry(&logrus.Logger{
+	Out:       os.Stderr,
+	Level:     logrus.DebugLevel,
+	Formatter: new(logrus.TextFormatter),
+})
 
 func NewErr(code errCode, msg string) *Err {
 	return &Err{Code: code, Msg: msg}
@@ -77,29 +85,29 @@ func (e *Err) WithPos(dept int) *Err {
 }
 
 func (e *Err) Err(l *logrus.Entry) *Err {
-	if l == nil {
-		l = logrus.NewEntry(&logrus.Logger{})
+	if len(e.Msg) == 0 {
+		return e
 	}
+
 	if e.Line == 0 || e.Func == "" {
 		e.WithPos(2)
 	}
+
 	l.
 		WithField("Code", e.Code).
 		WithField("Msg", e.Msg).
-		WithField("Func", e.Func).
-		WithField("Line", e.Line).
+		WithField("Line", fmt.Sprintf("%s:%d", e.Func, e.Line)).
 		Error()
 	return e
 }
 func (e *Err) Info(l *logrus.Entry) *Err {
-	if l == nil {
-		l = logrus.NewEntry(&logrus.Logger{})
+	if len(e.Msg) == 0 {
+		return e
 	}
+
 	l.
 		WithField("Code", e.Code).
 		WithField("Msg", e.Msg).
-		WithField("Func", e.Func).
-		WithField("Line", e.Line).
 		Info()
 	return e
 }
