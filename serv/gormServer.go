@@ -25,6 +25,7 @@ type GormSimpleServer struct {
 		User string
 		Pass string
 		Base string
+		Mode string
 	}
 }
 
@@ -32,14 +33,15 @@ func (g *GormSimpleServer) SetDsnString(dbstring string) {
 	g.DatabaseString = dbstring
 }
 
-func (g *GormSimpleServer) SetDsn(host, port, user, pass, dbname string) {
+func (g *GormSimpleServer) SetDsn(host, port, user, pass, dbname, sslmode string) {
 	g.Database.Host = host
 	g.Database.Port = port
 	g.Database.User = user
 	g.Database.Pass = pass
 	g.Database.Base = dbname
+	g.Database.Mode = sslmode
 
-	testDSN := "user=%s password=%s host=%s port=%s dbname=%s sslmode=disable"
+	testDSN := "user=%s password=%s host=%s port=%s dbname=%s sslmode=%s"
 	g.DatabaseString = fmt.Sprintf(
 		testDSN,
 		g.Database.User,
@@ -47,6 +49,7 @@ func (g *GormSimpleServer) SetDsn(host, port, user, pass, dbname string) {
 		g.Database.Host,
 		g.Database.Port,
 		g.Database.Base,
+		g.Database.Mode,
 	)
 
 }
