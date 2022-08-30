@@ -6,6 +6,7 @@ require (
 	github.com/go-co-op/gocron v1.15.0
 	github.com/lib/pq v1.10.6
 	github.com/sirupsen/logrus v1.8.1
+	github.com/spf13/viper v1.12.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/postgres v1.3.8
 	gorm.io/gorm v1.23.8
@@ -33,7 +34,6 @@ require (
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.12.0 // indirect
 	github.com/subosito/gotenv v1.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
